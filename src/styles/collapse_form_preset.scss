@@ -1,0 +1,39 @@
+.el-tabs__content {
+  margin-bottom: 8px;
+}
+
+.el-tab-pane .el-collapse {
+  &:first-child {
+    border-top: none;
+  }
+  &:last-child {
+    border-bottom: none;
+  }
+  :deep(.el-collapse-item__header) {
+    .el-collapse-item__arrow {
+      opacity: 0.4;
+    }
+  }
+  :deep(.el-collapse-item__wrap) .el-collapse-item__content {
+    padding-bottom: 0;
+  }
+  .el-collapse-item {
+    .el-collapse-header {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .el-collapse-items-selected {
+      position: absolute;
+      right: 40px;
+      opacity: 0.6;
+      font-size: 16px;
+    }
+    .el-collapse-item__arrow {
+      transform: rotate(-90deg);
+      opacity: 0.6;
+    }
+    .el-collapse-item__arrow.is-active {
+      transform: rotate(90deg);
+    }
+  }
+}

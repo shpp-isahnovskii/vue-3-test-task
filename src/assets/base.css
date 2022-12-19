@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* color palette from: <https://github.com/vuejs/theme> */
+:root {
+  --vt-c-white: #ffffff;
+  --vt-c-indigo: #1d2452;
+  --vt-c-shadow: #363e713d;
+  --vt-c-middle-gray: #676f8f;
+  --vt-c-light-gray: #dddee5;
+  --vt-c-night-blue: #c6c8d4;
+}
+
+/* color palette override: Element plus Theming */
+:root {
+  --el-border-radius-base: 8px; /* TODO: remove it */
+  --el-text-color-primary: var(--vt-c-indigo);
+  --el-color-primary: #415ada;
+  --el-color-primary-light-3: #1938d7;
+  --el-fill-color: #f4f4ff;
+  --el-tag-text-color: var(--vt-c-indigo);
+}
+
+.el-collapse {
+  --el-collapse-content-font-size: 14px;
+}
+.el-button--primary {
+  --el-button-hover-bg-color: var(--vt-c-indigo);
+  --el-button-hover-border-color: var(--vt-c-indigo);
+}
+.el-input {
+  background-color: var(--el-button-bg-color);
+  --el-input-text-color: var(--vt-c-indigo);
+}
+.el-select-v2 .el-tag {
+  --el-tag-text-color: var(--vt-c-indigo);
+}
+.el-checkbox {
+  --el-checkbox-text-color: var(--vt-c-indigo);
+  --el-checkbox-checked-text-color: var(--vt-c-indigo);
+  --el-checkbox-font-size: var(--el-font-size-medium);
+}
+.el-checkbox .el-checkbox__inner {
+  --el-checkbox-border-radius: 4px;
+  border-color: var(--vt-c-night-blue);
+}
+.el-table {
+  font-size: var(--el-font-size-medium);
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-background: var(--vt-c-white);
+  --color-text: var(--vt-c-indigo);
+  --color-text-table-header: var(--vt-c-middle-gray);
+  --color-box-shadow: var(--vt-c-shadow);
+  --color-border: var(--vt-c-light-gray);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: 500;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  line-height: 1.6;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-size: var(--el-font-size-medium);
+  text-rendering: optimizeLegibility;
+}

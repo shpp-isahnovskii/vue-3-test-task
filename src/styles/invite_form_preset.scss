@@ -1,0 +1,20 @@
+/* Preset for form inputs. Used in GeneralInfo and LocationInfo components */
+.el-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+
+  :deep(.el-form-item) {
+    .el-input__wrapper {
+      width: 345px;
+    }
+    .el-form-item__label {
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .el-input__inner {
+      font-size: var(--el-font-size-medium);
+    }
+  }
+}
