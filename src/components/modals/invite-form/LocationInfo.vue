@@ -1,10 +1,9 @@
 <script setup>
 import { ref, computed, reactive } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useInviteFormStore } from '@/stores/inviteForm';
 
-const store = useInviteFormStore();
-
-const locationsValidateForm = ref(store.locationInfoRef);
+const { locationInfoRef } = storeToRefs(useInviteFormStore());
 
 const locations = [
   {
@@ -34,7 +33,7 @@ const offices = [
 ];
 
 const handleCheckAllChange = (val) => {
-  locationsValidateForm.value.checkedOffices = val ? offices : [];
+  locationInfoRef.value.checkedOffices = val ? offices : [];
   isIndeterminate.value = false;
 };
 const handleCheckedCitiesChange = (value) => {
@@ -54,7 +53,7 @@ const validationRules = reactive({
 });
 
 const selectedCount = computed(
-  () => locationsValidateForm.value.checkedOffices.length
+  () => locationInfoRef.value.checkedOffices.length
 );
 const activeCollapseItem = ref('1');
 </script>
@@ -70,12 +69,12 @@ const activeCollapseItem = ref('1');
       </template>
       <el-form
         label-position="top"
-        :model="locationsValidateForm"
+        :model="locationInfoRef"
         :rules="validationRules"
       >
         <el-form-item label="Main Location" prop="mainLocation">
           <el-select
-            v-model="locationsValidateForm.mainLocation"
+            v-model="locationInfoRef.mainLocation"
             placeholder="Your base location"
             size="large"
           >
@@ -95,7 +94,7 @@ const activeCollapseItem = ref('1');
         </el-checkbox>
         <el-form-item label="Available locations" class="locations-wrapper">
           <el-checkbox-group
-            v-model="locationsValidateForm.checkedOffices"
+            v-model="locationInfoRef.checkedOffices"
             @change="handleCheckedCitiesChange"
           >
             <el-checkbox

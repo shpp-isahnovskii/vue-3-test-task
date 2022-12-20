@@ -25,7 +25,9 @@ export const useInviteFormStore = defineStore('inviteForm', {
     },
     /* Page 4 */
     permissions: {
-      permissions: [],
+      access: [],
+      management: [],
+      admin: false,
     },
   }),
   getters: {

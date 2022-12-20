@@ -1,85 +1,15 @@
 <script setup>
 import { useInviteFormStore } from '@/stores/inviteForm';
-
+import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
-const store = useInviteFormStore();
+import { accessData, managementData } from '@/constants/invite-form/roles';
+
+const { permissions } = storeToRefs(useInviteFormStore());
+
+permissions.value.access = ref(accessData);
 
 const activeCollapseItem = ref('1');
-
-const tableData = ref([
-  {
-    name: 'Warehouse requests',
-    status: {
-      view: false,
-      create: false,
-      approve: false,
-      pay: false,
-    },
-  },
-  {
-    name: 'Purchase requests',
-    status: {
-      view: true,
-      create: false,
-      approve: false,
-      pay: false,
-    },
-  },
-  {
-    name: 'Request for proposals',
-    status: {
-      view: true,
-      create: false,
-      approve: false,
-      pay: null,
-    },
-  },
-  {
-    name: 'Purchase orders',
-    status: {
-      view: true,
-      create: false,
-      approve: false,
-      pay: null,
-    },
-  },
-  {
-    name: 'Receipts',
-    status: {
-      view: true,
-      create: false,
-      approve: false,
-      pay: null,
-    },
-  },
-  {
-    name: 'Invoices',
-    status: {
-      view: true,
-      create: false,
-      approve: false,
-      pay: false,
-    },
-  },
-  {
-    name: 'Expenses',
-    status: {
-      view: true,
-      create: false,
-      approve: false,
-      pay: false,
-    },
-  },
-]);
-const managementCheckList = ref([
-  'Configuration',
-  'Suppliers and items',
-  'Budgets',
-  'Warehouse manager',
-  'Reports',
-]);
-const managementCheckListRef = ref([]);
 </script>
 
 <template>
@@ -108,7 +38,11 @@ const managementCheckListRef = ref([]);
               <td class="el-cell"><el-checkbox></el-checkbox></td>
               <td class="el-cell"><el-checkbox></el-checkbox></td>
             </tr>
-            <tr v-for="(row, index) in tableData" :key="index" class="el-row">
+            <tr
+              v-for="(row, index) in permissions.access"
+              :key="index"
+              class="el-row"
+            >
               <td class="el-cell el-cell__name">{{ row.name }}</td>
               <td
                 v-for="(val, accessName) in row.status"
@@ -117,7 +51,7 @@ const managementCheckListRef = ref([]);
               >
                 <el-checkbox
                   v-if="val !== null"
-                  v-model="tableData[index].status[accessName]"
+                  v-model="permissions.access[index].status[accessName]"
                 ></el-checkbox>
               </td>
             </tr>
@@ -126,15 +60,17 @@ const managementCheckListRef = ref([]);
         <div class="el-checklist">
           <div class="el-checkbox__header">Management:</div>
           <el-checkbox class="el__bold">All Bellow</el-checkbox>
-          <el-checkbox-group v-model="managementCheckListRef">
+          <el-checkbox-group v-model="permissions.management">
             <el-checkbox
-              v-for="name in managementCheckList"
+              v-for="name in managementData"
               :key="name"
               :label="name"
               >{{ name }}</el-checkbox
             >
           </el-checkbox-group>
-          <el-checkbox class="el-checkbox__admin-access"
+          <el-checkbox
+            v-model="permissions.admin"
+            class="el-checkbox__admin-access"
             >Admin (Full Access)</el-checkbox
           >
         </div>

@@ -11,6 +11,10 @@ const props = defineProps({
   checkAll: {
     default: false,
   },
+  nodeProps: {
+    children: 'children',
+    label: 'label',
+  }
 });
 
 const nodeKeyRef = ref(props.nodeKey);
@@ -80,11 +84,6 @@ watch(checkAllProp, (val) => {
   checkAllProp.value = val;
 });
 
-/* props are bound with data.js from the constants\invite-form folder */
-const defaultProps = {
-  children: 'children',
-  label: 'label',
-};
 </script>
 
 <template>
@@ -99,7 +98,7 @@ const defaultProps = {
       :node-key="nodeKeyRef"
       ref="dataRef"
       :data="props.data"
-      :props="defaultProps"
+      :props="props.nodeProps"
       @check="handleCheckSingleNode"
       show-checkbox
     />

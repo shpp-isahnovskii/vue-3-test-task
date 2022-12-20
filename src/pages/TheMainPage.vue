@@ -1,7 +1,6 @@
 <script setup>
 import InviteForm from '@/components/modals/invite-form/InviteForm.vue';
-import { pageContent } from '@/constants/invite-form/data';
-
+import { pageContent } from '@/constants/defaultText';
 </script>
 
 <template>

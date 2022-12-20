@@ -1,11 +1,8 @@
 <script setup>
-import { ref } from 'vue';
-
+import { storeToRefs } from 'pinia';
 import { useInviteFormStore } from '@/stores/inviteForm';
 
-const store = useInviteFormStore();
-
-const generalInfo = ref(store.generalInfoRef);
+const { generalInfoRef } = storeToRefs(useInviteFormStore());
 
 const companiesList = [
   { label: 'Precoro', value: 'general' },
@@ -17,25 +14,25 @@ const companiesList = [
 </script>
 
 <template>
-  <el-form :model="generalInfo" label-position="top">
+  <el-form :model="generalInfoRef" label-position="top">
     <el-form-item label="First Name">
-      <el-input v-model="generalInfo.name" size="large" />
+      <el-input v-model="generalInfoRef.name" size="large" />
     </el-form-item>
     <el-form-item label="Last Name">
-      <el-input v-model="generalInfo.lastName" size="large" />
+      <el-input v-model="generalInfoRef.lastName" size="large" />
     </el-form-item>
     <el-form-item label="Email Address">
-      <el-input v-model="generalInfo.email" size="large" />
+      <el-input v-model="generalInfoRef.email" size="large" />
     </el-form-item>
     <el-form-item label="Phone Number">
-      <el-input v-model="generalInfo.phone" size="large" />
+      <el-input v-model="generalInfoRef.phone" size="large" />
     </el-form-item>
     <el-form-item label="Position">
-      <el-input v-model="generalInfo.position" size="large" />
+      <el-input v-model="generalInfoRef.position" size="large" />
     </el-form-item>
     <el-form-item label="Available Companies">
       <el-select-v2
-        v-model="generalInfo.companies"
+        v-model="generalInfoRef.companies"
         :options="companiesList"
         placeholder="Please select"
         size="large"

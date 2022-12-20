@@ -1,18 +1,16 @@
 <script setup>
-import { ref, computed, reactive } from 'vue';
+import { ref, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useInviteFormStore } from '@/stores/inviteForm';
 import CheckboxTree from '../../checkbox-tree/CheckboxTree.vue';
 
 import {
   classesData,
   departmentsData,
   dcfThreeData,
-} from '@/constants/invite-form/data.js';
+} from '@/constants/invite-form/documents.js';
 
-import { useInviteFormStore } from '@/stores/inviteForm';
-
-const store = useInviteFormStore();
-
-let documentsInfoRef = reactive(store.documentsInfoRef);
+const { documentsInfoRef } = storeToRefs(useInviteFormStore());
 
 let checkAllRef = ref(false);
 const checkAllProp = computed({
@@ -34,25 +32,25 @@ let checkedNodesList = ref([false, false, false]);
 
 function updateTree(key, value) {
   /** Names:
-   *  classes
-   *  departments
-   *  dcf
+   *  classes 0
+   *  departments 1
+   *  dcf 2
    */
   switch (key) {
     case 0:
-      documentsInfoRef.classes = value.data;
+      documentsInfoRef.value.classes = value.data;
       break;
     case 1:
-      documentsInfoRef.departments = value.data;
+      documentsInfoRef.value.departments = value.data;
       break;
     default:
-      documentsInfoRef.dcf = value.data;
+      documentsInfoRef.value.dcf = value.data;
   }
   checkedNodesList.value[key] = value.status;
 }
 
 const selectedCount = computed(
-  () => Object.values(documentsInfoRef).flat(1).length
+  () => Object.values(documentsInfoRef.value).flat(1).length
 );
 const activeCollapseItem = ref('1');
 </script>
