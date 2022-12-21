@@ -17,13 +17,20 @@ const pages = {
   fourth: 'fourth',
 };
 
+const validPages = [false, false, false, false];
+
 const open = ref(true);
 const activeName = ref(pages.first);
 
-const handleNextPageClick = () => {
+/* reference to the general-info Child page */
+const generalInfoRef = ref(null);
+
+const handleNextPageClick = async () => {
   switch (activeName.value) {
     case pages.first:
-      activeName.value = pages.second;
+      if (await generalInfoRef.value.submitForm()) {
+        activeName.value = pages.second;
+      }
       break;
     case pages.second:
       activeName.value = pages.third;
@@ -37,6 +44,10 @@ const handleNextPageClick = () => {
   }
 };
 
+function test(tab) {
+  console.log(tab.value);
+}
+
 function submitForm() {
   store.submitForm();
 }
@@ -49,9 +60,9 @@ function submitForm() {
       <div class="modal-content">
         <div class="close-modal" @click="open = false"></div>
         <h3 class="content-header">Invite User</h3>
-        <el-tabs v-model="activeName" class="invite-form">
+        <el-tabs @tab-click="test" v-model="activeName" class="invite-form">
           <el-tab-pane label="Main Info" :name="pages.first" class="form-item">
-            <general-info />
+            <general-info ref="generalInfoRef" />
           </el-tab-pane>
           <el-tab-pane
             label="Available Locations"

@@ -131,7 +131,10 @@ const activeCollapseItem = ref('1');
         </table>
         <div class="el-checklist">
           <div class="el-checkbox__header">Management:</div>
-          <el-checkbox class="el__bold" v-model="checkedAllManagement" @change="handleManagementAllChange"
+          <el-checkbox
+            class="el__bold"
+            v-model="checkedAllManagement"
+            @change="handleManagementAllChange"
             >All Bellow</el-checkbox
           >
           <el-checkbox-group
