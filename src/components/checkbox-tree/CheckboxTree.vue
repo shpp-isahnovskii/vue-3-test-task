@@ -1,21 +1,31 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   data: {
     default: [],
   },
   nodeKey: {
-    default: 'id',
+    default: 'label',
   },
-  checkAll: {
-    default: false,
+  checkAllAction: {
+    default: undefined, // undefined if no action
   },
   nodeProps: {
     children: 'children',
     label: 'label',
-  }
+  },
 });
+
+watch(
+  () => props.checkAllAction,
+  (value) => {
+    if (value !== undefined) {
+      checkAll.value = value;
+      handleCheckAllChange(value);
+    }
+  }
+);
 
 const nodeKeyRef = ref(props.nodeKey);
 
@@ -30,15 +40,6 @@ const emitUpdate = (status) => {
 const dataRef = ref();
 
 const checkAll = ref(false);
-const checkAllProp = computed({
-  get() {
-    return props.checkAll;
-  },
-  set(val) {
-    checkAll.value = val;
-    handleCheckAllChange(val);
-  },
-});
 
 const rootKeys = props.data.map((element) => element[props.nodeKey]);
 const treeLength = keysSearch(props.data, props.nodeKey).length;
@@ -78,12 +79,6 @@ const handleCheckAllChange = (val) => {
   dataRef.value.setCheckedKeys(val === true ? rootKeys : []);
   emitUpdate(val);
 };
-
-/* used to track prop.checkAll changes that stored in get() */
-watch(checkAllProp, (val) => {
-  checkAllProp.value = val;
-});
-
 </script>
 
 <template>

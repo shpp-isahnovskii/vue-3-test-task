@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useInviteFormStore } from '@/stores/inviteForm';
 import CheckboxTree from '../../checkbox-tree/CheckboxTree.vue';
@@ -12,23 +12,26 @@ import {
 
 const { documentsInfoRef } = storeToRefs(useInviteFormStore());
 
-let checkAllRef = ref(false);
+const checkedNodesList = ref([false, false, false]);
+const checkAllTreesAction = ref(undefined);
+
 const checkAllProp = computed({
   get() {
     return checkedNodesList.value.every((el) => el);
   },
   set(val) {
-    checkAllRef.value = val;
     setAllTrees(val);
   },
 });
 
 const setAllTrees = (event) => {
+  checkAllTreesAction.value = event;
   checkedNodesList.value =
     event === true ? [true, true, true] : [false, false, false];
+  nextTick(() => {
+    checkAllTreesAction.value = undefined;
+  });
 };
-
-let checkedNodesList = ref([false, false, false]);
 
 function updateTree(key, value) {
   /** Names:
@@ -77,24 +80,21 @@ const activeCollapseItem = ref('1');
           <el-form-item label="Classes" class="checklist-tree__wrapper">
             <checkbox-tree
               :data="classesData"
-              nodeKey="label"
-              :checkAll="checkedNodesList[0]"
+              :checkAllAction="checkAllTreesAction"
               @update:CheckAll="updateTree(0, $event)"
             />
           </el-form-item>
           <el-form-item label="Departments" class="checklist-tree__wrapper">
             <checkbox-tree
               :data="departmentsData"
-              nodeKey="label"
-              :checkAll="checkedNodesList[1]"
+              :checkAllAction="checkAllTreesAction"
               @update:CheckAll="updateTree(1, $event)"
             />
           </el-form-item>
           <el-form-item label="DCF 3" class="checklist-tree__wrapper">
             <checkbox-tree
               :data="dcfThreeData"
-              nodeKey="label"
-              :checkAll="checkedNodesList[2]"
+              :checkAllAction="checkAllTreesAction"
               @update:CheckAll="updateTree(2, $event)"
             />
           </el-form-item>

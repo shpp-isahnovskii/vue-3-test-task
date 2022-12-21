@@ -9,6 +9,57 @@ const { permissions } = storeToRefs(useInviteFormStore());
 
 permissions.value.access = ref(accessData);
 
+/* view 0 create 1 approve 2 pay 3 */
+const checkedColumns = ref([false, false, false, false]);
+
+const handleAllCheckChange = (index, accessName) => {
+  if (isPermissionsFalsy(accessName)) {
+    columnSetAll(accessName, true);
+    checkedColumns[index] = true;
+    return;
+  }
+  columnSetAll(accessName, false);
+  checkedColumns[index] = false;
+};
+
+const handleCheckChange = (index, accessName, event) => {
+  if (checkedColumns.value[index] === true && event === false) {
+    checkedColumns.value[index] = false;
+    return;
+  }
+  if (
+    event === true &&
+    checkedColumns.value[index] === false &&
+    !isPermissionsFalsy(accessName)
+  ) {
+    checkedColumns.value[index] = true;
+  }
+};
+
+const isPermissionsFalsy = (accessName) => {
+  return permissions.value.access.find((val) => {
+    return val.status[accessName] === false;
+  });
+};
+
+const columnSetAll = (accessName, status) => {
+  permissions.value.access.forEach((_, i) => {
+    if (permissions.value.access[i].status[accessName] !== null) {
+      permissions.value.access[i].status[accessName] = status;
+    }
+  });
+};
+
+const checkedAllManagement = ref(false);
+
+const handleManagementAllChange = (value) => {
+  permissions.value.management = value === true ? managementData : [];
+};
+
+const handleManagementChange = (value) => {
+  checkedAllManagement.value = value.length === managementData.length;
+};
+
 const activeCollapseItem = ref('1');
 </script>
 
@@ -33,25 +84,46 @@ const activeCollapseItem = ref('1');
           <tbody class="el-table__body">
             <tr class="el-row">
               <td class="el-cell el__bold">All Bellow</td>
-              <td class="el-cell"><el-checkbox></el-checkbox></td>
-              <td class="el-cell"><el-checkbox></el-checkbox></td>
-              <td class="el-cell"><el-checkbox></el-checkbox></td>
-              <td class="el-cell"><el-checkbox></el-checkbox></td>
+              <td class="el-cell">
+                <el-checkbox
+                  v-model="checkedColumns[0]"
+                  @change="handleAllCheckChange(0, 'view')"
+                ></el-checkbox>
+              </td>
+              <td class="el-cell">
+                <el-checkbox
+                  v-model="checkedColumns[1]"
+                  @change="handleAllCheckChange(1, 'create')"
+                ></el-checkbox>
+              </td>
+              <td class="el-cell">
+                <el-checkbox
+                  v-model="checkedColumns[2]"
+                  @change="handleAllCheckChange(2, 'approve')"
+                ></el-checkbox>
+              </td>
+              <td class="el-cell">
+                <el-checkbox
+                  v-model="checkedColumns[3]"
+                  @change="handleAllCheckChange(3, 'pay')"
+                ></el-checkbox>
+              </td>
             </tr>
             <tr
-              v-for="(row, index) in permissions.access"
-              :key="index"
+              v-for="(row, rowIndex) in permissions.access"
+              :key="rowIndex"
               class="el-row"
             >
               <td class="el-cell el-cell__name">{{ row.name }}</td>
               <td
-                v-for="(val, accessName) in row.status"
+                v-for="(val, accessName, colIndex) in row.status"
                 :key="accessName"
                 class="el-cell"
               >
                 <el-checkbox
                   v-if="val !== null"
-                  v-model="permissions.access[index].status[accessName]"
+                  v-model="permissions.access[rowIndex].status[accessName]"
+                  @change="handleCheckChange(colIndex, accessName, $event)"
                 ></el-checkbox>
               </td>
             </tr>
@@ -59,8 +131,13 @@ const activeCollapseItem = ref('1');
         </table>
         <div class="el-checklist">
           <div class="el-checkbox__header">Management:</div>
-          <el-checkbox class="el__bold">All Bellow</el-checkbox>
-          <el-checkbox-group v-model="permissions.management">
+          <el-checkbox class="el__bold" v-model="checkedAllManagement" @change="handleManagementAllChange"
+            >All Bellow</el-checkbox
+          >
+          <el-checkbox-group
+            v-model="permissions.management"
+            @change="handleManagementChange"
+          >
             <el-checkbox
               v-for="name in managementData"
               :key="name"
@@ -214,6 +291,7 @@ const activeCollapseItem = ref('1');
     opacity: 0.5;
   }
   .el-link {
+    vertical-align: initial;
     text-decoration: underline;
   }
   &:before {
