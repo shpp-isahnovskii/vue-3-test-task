@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 
 export const useInviteFormStore = defineStore('inviteForm', {
   state: () => ({
+    isFormSubmitted: false,
+
     toAllCompanies: true,
     /* Page 1 */
     generalInfoRef: {
@@ -10,7 +12,7 @@ export const useInviteFormStore = defineStore('inviteForm', {
       email: 'jondoe@gmail.com',
       phone: '+38 044 111 22 33',
       position: 'Developer',
-      companies: [],
+      companies: ['general'],
     },
     /* Page 2 */
     locationInfoRef: {
@@ -31,7 +33,7 @@ export const useInviteFormStore = defineStore('inviteForm', {
     },
   }),
   getters: {
-    submitData: (state) => ({
+    formData: (state) => ({
       toAllCompanies: state.toAllCompanies,
       ...state.generalInfoRef,
       ...state.locationInfoRef,
@@ -42,8 +44,12 @@ export const useInviteFormStore = defineStore('inviteForm', {
   actions: {
     submitForm() {
       console.log('good job!');
-      console.log(this.submitData);
+      console.log(this.formData);
+      this.isFormSubmitted = true;
+    },
+    resetForm() {
       this.$reset();
+      this.isFormSubmitted = false;
     },
   },
 });

@@ -205,7 +205,7 @@ const activeCollapseItem = ref('1');
     content: '';
     display: inline-block;
     position: absolute;
-    margin: -5px 0 0 4px;
+    margin: -7px 0 0 4px;
     background: url('@/assets/icons/icon-info.svg') no-repeat center;
     width: 24px;
     height: 24px;

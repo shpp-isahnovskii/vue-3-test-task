@@ -17,8 +17,6 @@ const pages = {
   fourth: 'fourth',
 };
 
-const validPages = [false, false, false, false];
-
 const open = ref(true);
 const activeName = ref(pages.first);
 
@@ -44,23 +42,32 @@ const handleNextPageClick = async () => {
   }
 };
 
-function test(tab) {
-  console.log(tab.value);
+function handleClick() {
+  if (store.isFormSubmitted) {
+    store.resetForm();
+  } else {
+    open.value = !open.value;
+    activeName.value = 'first';
+  }
 }
 
 function submitForm() {
+  /* some actions */
   store.submitForm();
 }
 </script>
 
 <template>
-  <el-button @click="open = !open">Modal Form</el-button>
+  <el-button @click="handleClick"
+    ><span v-if="store.isFormSubmitted">Reset Form</span
+    ><span v-else>Modal Form</span></el-button
+  >
   <Teleport to="body">
     <div v-if="open" class="modal-overlay">
       <div class="modal-content">
         <div class="close-modal" @click="open = false"></div>
         <h3 class="content-header">Invite User</h3>
-        <el-tabs @tab-click="test" v-model="activeName" class="invite-form">
+        <el-tabs v-model="activeName" class="invite-form">
           <el-tab-pane label="Main Info" :name="pages.first" class="form-item">
             <general-info ref="generalInfoRef" />
           </el-tab-pane>

@@ -7,7 +7,6 @@ const { generalInfoRef } = storeToRefs(useInviteFormStore());
 
 const validationRef = ref();
 function submitForm() {
-  /* Promise testing */
   return new Promise((res) => {
     if (!validationRef.value) return res(false);
     validationRef.value.validate((valid) => res(valid));
