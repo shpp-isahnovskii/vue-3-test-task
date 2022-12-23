@@ -9,32 +9,24 @@ import { ref } from 'vue';
 
 const store = useInviteFormStore();
 
-//TODO used like type, need to be removed
-const pages = {
-  first: 'first',
-  second: 'second',
-  third: 'third',
-  fourth: 'fourth',
-};
-
 const open = ref(true);
-const activeName = ref(pages.first);
+const activeName = ref('first');
 
 /* reference to the general-info Child page */
 const generalInfoRef = ref(null);
 
 const handleNextPageClick = async () => {
   switch (activeName.value) {
-    case pages.first:
-      if (await generalInfoRef.value.submitForm()) {
-        activeName.value = pages.second;
+    case 'first':
+      if (await generalInfoRef.value.isValid()) {
+        activeName.value = 'second';
       }
       break;
-    case pages.second:
-      activeName.value = pages.third;
+    case 'second':
+      activeName.value = 'third';
       break;
-    case pages.third:
-      activeName.value = pages.fourth;
+    case 'third':
+      activeName.value = 'fourth';
       break;
     default:
       submitForm();
@@ -42,23 +34,22 @@ const handleNextPageClick = async () => {
   }
 };
 
-function handleClick() {
+const handleButtonClick = () => {
   if (store.isFormSubmitted) {
-    store.resetForm();
+    store.resetInviteForm();
   } else {
     open.value = !open.value;
     activeName.value = 'first';
   }
-}
+};
 
-function submitForm() {
-  /* some actions */
-  store.submitForm();
-}
+const submitForm = () => {
+  store.submitInviteForm();
+};
 </script>
 
 <template>
-  <el-button @click="handleClick"
+  <el-button @click="handleButtonClick"
     ><span v-if="store.isFormSubmitted">Reset Form</span
     ><span v-else>Modal Form</span></el-button
   >
@@ -68,24 +59,24 @@ function submitForm() {
         <div class="close-modal" @click="open = false"></div>
         <h3 class="content-header">Invite User</h3>
         <el-tabs v-model="activeName" class="invite-form">
-          <el-tab-pane label="Main Info" :name="pages.first" class="form-item">
+          <el-tab-pane label="Main Info" :name="'first'" class="form-item">
             <general-info ref="generalInfoRef" />
           </el-tab-pane>
           <el-tab-pane
             label="Available Locations"
-            :name="pages.second"
+            :name="'second'"
             class="form-item"
           >
             <location-info />
           </el-tab-pane>
           <el-tab-pane
             label="Available Documents Custom Fields"
-            :name="pages.third"
+            :name="'third'"
             class="form-item"
           >
             <available-documents />
           </el-tab-pane>
-          <el-tab-pane label="Roles" :name="pages.fourth" class="form-item">
+          <el-tab-pane label="Roles" :name="'fourth'" class="form-item">
             <roles-info />
           </el-tab-pane>
         </el-tabs>
@@ -112,7 +103,7 @@ function submitForm() {
 <style lang="scss" scoped>
 .modal-overlay {
   top: 0;
-  position: fixed; //remove
+  position: fixed;
   width: 100vw;
   height: 100vh;
   overflow-y: auto;
@@ -229,7 +220,7 @@ function submitForm() {
     }
   }
   .next-button {
-    background-color: var(--vt-c-indigo); /* TODO: remove it*/
+    background-color: var(--vt-c-indigo);
     margin-left: auto;
   }
   .switch-wrapper {

@@ -17,6 +17,10 @@ const props = defineProps({
   },
 });
 
+const dataRef = ref();
+const checkAll = ref(false);
+const nodeKeyRef = ref(props.nodeKey);
+
 watch(
   () => props.checkAllAction,
   (value) => {
@@ -27,36 +31,19 @@ watch(
   }
 );
 
-const nodeKeyRef = ref(props.nodeKey);
+const rootKeys = props.data.map((element) => element[props.nodeKey]);
+const handleCheckAllChange = (val) => {
+  dataRef.value.setCheckedKeys(val === true ? rootKeys : []);
+  emitUpdate(val);
+};
 
-const emit = defineEmits(['update:CheckAll']);
+const emit = defineEmits(['update:Tree']);
 const emitUpdate = (status) => {
-  emit('update:CheckAll', {
+  emit('update:Tree', {
     status: status,
     data: dataRef.value.getCheckedKeys(),
   });
 };
-
-const dataRef = ref();
-
-const checkAll = ref(false);
-
-const rootKeys = props.data.map((element) => element[props.nodeKey]);
-const treeLength = keysSearch(props.data, props.nodeKey).length;
-
-function keysSearch(data, fieldToFind, result = []) {
-  data.forEach((element) => {
-    if (element.children) {
-      result = keysSearch(element.children, fieldToFind, [
-        element[fieldToFind],
-        ...result,
-      ]);
-    } else {
-      result = [element[fieldToFind], ...result];
-    }
-  });
-  return result;
-}
 
 const handleCheckSingleNode = () => {
   /* Clicking on a checkbox and all became checked */
@@ -75,10 +62,20 @@ const handleCheckSingleNode = () => {
   emitUpdate(false);
 };
 
-const handleCheckAllChange = (val) => {
-  dataRef.value.setCheckedKeys(val === true ? rootKeys : []);
-  emitUpdate(val);
-};
+const treeLength = keysSearch(props.data, props.nodeKey).length;
+function keysSearch(data, fieldToFind, result = []) {
+  data.forEach((element) => {
+    if (element.children) {
+      result = keysSearch(element.children, fieldToFind, [
+        element[fieldToFind],
+        ...result,
+      ]);
+    } else {
+      result = [element[fieldToFind], ...result];
+    }
+  });
+  return result;
+}
 </script>
 
 <template>

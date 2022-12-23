@@ -5,52 +5,50 @@ import { useInviteFormStore } from '@/stores/inviteForm';
 
 const { generalInfoRef } = storeToRefs(useInviteFormStore());
 
-const validationRef = ref();
-function submitForm() {
-  return new Promise((res) => {
-    if (!validationRef.value) return res(false);
-    validationRef.value.validate((valid) => res(valid));
-  });
-};
-
-defineExpose({ submitForm });
-
-const validateLength = (_, value, callback) => {
-  if (value.length === 0) {
-    callback(new Error('Please input the missing data'));
-    return;
-  }
-  callback();
-};
-
-const rules = reactive({
-  name: [
-    { validator: validateLength, trigger: 'blur' },
-    { min: 3, message: 'Length should more then 3', trigger: 'blur' },
-  ],
-  lastName: [
-    { validator: validateLength, trigger: 'blur' },
-    { min: 3, message: 'Length should more then 3', trigger: 'blur' },
-  ],
-  email: [
-    { validator: validateLength, trigger: 'blur' },
-    {
-      type: 'email',
-      message: 'Please input correct email address',
-      trigger: 'blur',
-    },
-  ],
-  phone: [{ validator: validateLength, trigger: 'blur' }],
-  position: [{ validator: validateLength, trigger: 'blur' }],
-  companies: [{ validator: validateLength, trigger: 'blur' }],
-});
-
 const companiesList = [
   { label: 'Precoro', value: 'general' },
   { label: 'Precoro Development', value: 'dev' },
   { label: 'Precoro Mobile', value: 'mobile' },
   { label: 'Precoro Design', value: 'design' },
 ];
+
+const validationRef = ref();
+const validateNoLength = (_, value, callback) => {
+  if (value.length === 0) {
+    callback(new Error('Please input the missing data'));
+    return;
+  }
+  callback();
+};
+const rules = reactive({
+  name: [
+    { validator: validateNoLength, trigger: 'blur' },
+    { min: 3, message: 'Length should more then 3', trigger: 'blur' },
+  ],
+  lastName: [
+    { validator: validateNoLength, trigger: 'blur' },
+    { min: 3, message: 'Length should more then 3', trigger: 'blur' },
+  ],
+  email: [
+    { validator: validateNoLength, trigger: 'blur' },
+    {
+      type: 'email',
+      message: 'Please input correct email address',
+      trigger: 'blur',
+    },
+  ],
+  phone: [{ validator: validateNoLength, trigger: 'blur' }],
+  position: [{ validator: validateNoLength, trigger: 'blur' }],
+  companies: [{ validator: validateNoLength, trigger: 'blur' }],
+});
+
+function isValid() {
+  return new Promise((res) => {
+    if (!validationRef.value) return res(false);
+    validationRef.value.validate((valid) => res(valid));
+  });
+}
+defineExpose({ isValid });
 </script>
 
 <template>

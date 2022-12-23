@@ -7,42 +7,39 @@ import { accessData, managementData } from '@/constants/invite-form/roles';
 
 const { permissions } = storeToRefs(useInviteFormStore());
 
-permissions.value.access = ref(accessData);
+permissions.value.access = accessData;
 
-/* view 0 create 1 approve 2 pay 3 */
-const checkedColumns = ref([false, false, false, false]);
+const checkedColumns = ref({
+  view: false,
+  create: false,
+  approve: false,
+  pay: false,
+});
 
-const handleAllCheckChange = (index, accessName) => {
-  if (isPermissionsFalsy(accessName)) {
-    columnSetAll(accessName, true);
-    checkedColumns[index] = true;
+const handleCheckAllChange = (columnName, e) => {
+  setAllColumnVal(columnName, e);
+  checkedColumns.value[columnName] = e;
+};
+
+const handleCheckChange = (columnName, e) => {
+  /* uncheck checkAll */
+  if (e === false && checkedColumns.value[columnName] === true) {
+    checkedColumns.value[columnName] = false;
     return;
   }
-  columnSetAll(accessName, false);
-  checkedColumns[index] = false;
-};
-
-const handleCheckChange = (index, accessName, event) => {
-  if (checkedColumns.value[index] === true && event === false) {
-    checkedColumns.value[index] = false;
-    return;
-  }
-  if (
-    event === true &&
-    checkedColumns.value[index] === false &&
-    !isPermissionsFalsy(accessName)
-  ) {
-    checkedColumns.value[index] = true;
+  /* checkAll to true*/
+  if (e === true && !isHaveFalsyValue(columnName)) {
+    checkedColumns.value[columnName] = true;
   }
 };
 
-const isPermissionsFalsy = (accessName) => {
-  return permissions.value.access.find((val) => {
-    return val.status[accessName] === false;
-  });
+const isHaveFalsyValue = (columnName) => {
+  return permissions.value.access.find(
+    (val) => val.status[columnName] === false
+  );
 };
 
-const columnSetAll = (accessName, status) => {
+const setAllColumnVal = (accessName, status) => {
   permissions.value.access.forEach((_, i) => {
     if (permissions.value.access[i].status[accessName] !== null) {
       permissions.value.access[i].status[accessName] = status;
@@ -86,26 +83,26 @@ const activeCollapseItem = ref('1');
               <td class="el-cell el__bold">All Bellow</td>
               <td class="el-cell">
                 <el-checkbox
-                  v-model="checkedColumns[0]"
-                  @change="handleAllCheckChange(0, 'view')"
+                  v-model="checkedColumns.view"
+                  @change="handleCheckAllChange('view', $event)"
                 ></el-checkbox>
               </td>
               <td class="el-cell">
                 <el-checkbox
-                  v-model="checkedColumns[1]"
-                  @change="handleAllCheckChange(1, 'create')"
+                  v-model="checkedColumns.create"
+                  @change="handleCheckAllChange('create', $event)"
                 ></el-checkbox>
               </td>
               <td class="el-cell">
                 <el-checkbox
-                  v-model="checkedColumns[2]"
-                  @change="handleAllCheckChange(2, 'approve')"
+                  v-model="checkedColumns.approve"
+                  @change="handleCheckAllChange('approve', $event)"
                 ></el-checkbox>
               </td>
               <td class="el-cell">
                 <el-checkbox
-                  v-model="checkedColumns[3]"
-                  @change="handleAllCheckChange(3, 'pay')"
+                  v-model="checkedColumns.pay"
+                  @change="handleCheckAllChange('pay', $event)"
                 ></el-checkbox>
               </td>
             </tr>
@@ -116,14 +113,14 @@ const activeCollapseItem = ref('1');
             >
               <td class="el-cell el-cell__name">{{ row.name }}</td>
               <td
-                v-for="(val, accessName, colIndex) in row.status"
-                :key="accessName"
+                v-for="(val, columnName) in row.status"
+                :key="columnName"
                 class="el-cell"
               >
                 <el-checkbox
                   v-if="val !== null"
-                  v-model="permissions.access[rowIndex].status[accessName]"
-                  @change="handleCheckChange(colIndex, accessName, $event)"
+                  v-model="permissions.access[rowIndex].status[columnName]"
+                  @change="handleCheckChange(columnName, $event)"
                 ></el-checkbox>
               </td>
             </tr>

@@ -12,45 +12,34 @@ import {
 
 const { documentsInfoRef } = storeToRefs(useInviteFormStore());
 
-const checkedNodesList = ref([false, false, false]);
+const checkedTrees = ref({ classes: false, departments: false, dcf: false });
+
+/* const to send action to the child tree and set all to true or false*/
 const checkAllTreesAction = ref(undefined);
 
 const checkAllProp = computed({
   get() {
-    return checkedNodesList.value.every((el) => el);
+    return Object.values(checkedTrees.value).every((val) => val === true);
   },
   set(val) {
-    setAllTrees(val);
+    handleAllTreesChange(val);
   },
 });
 
-const setAllTrees = (event) => {
+const handleAllTreesChange = (event) => {
+  Object.keys(checkedTrees.value).forEach((el) => {
+    checkedTrees.value[el] = event;
+  });
   checkAllTreesAction.value = event;
-  checkedNodesList.value =
-    event === true ? [true, true, true] : [false, false, false];
   nextTick(() => {
     checkAllTreesAction.value = undefined;
   });
 };
 
-function updateTree(key, value) {
-  /** Names:
-   *  classes 0
-   *  departments 1
-   *  dcf 2
-   */
-  switch (key) {
-    case 0:
-      documentsInfoRef.value.classes = value.data;
-      break;
-    case 1:
-      documentsInfoRef.value.departments = value.data;
-      break;
-    default:
-      documentsInfoRef.value.dcf = value.data;
-  }
-  checkedNodesList.value[key] = value.status;
-}
+const updateTree = (treeName, emitData) => {
+  documentsInfoRef.value[treeName] = emitData.data;
+  checkedTrees.value[treeName] = emitData.status;
+};
 
 const selectedCount = computed(
   () => Object.values(documentsInfoRef.value).flat(1).length
@@ -69,7 +58,7 @@ const activeCollapseItem = ref('1');
       </template>
       <el-form label-position="top">
         <el-form-item>
-          <el-checkbox v-model="checkAllProp" @change="setAllTrees"
+          <el-checkbox v-model="checkAllProp" @change="handleAllTreesChange"
             >Select All Document Custom Fields
           </el-checkbox>
         </el-form-item>
@@ -81,21 +70,21 @@ const activeCollapseItem = ref('1');
             <checkbox-tree
               :data="classesData"
               :checkAllAction="checkAllTreesAction"
-              @update:CheckAll="updateTree(0, $event)"
+              @update:Tree="updateTree('classes', $event)"
             />
           </el-form-item>
           <el-form-item label="Departments" class="checklist-tree__wrapper">
             <checkbox-tree
               :data="departmentsData"
               :checkAllAction="checkAllTreesAction"
-              @update:CheckAll="updateTree(1, $event)"
+              @update:Tree="updateTree('departments', $event)"
             />
           </el-form-item>
           <el-form-item label="DCF 3" class="checklist-tree__wrapper">
             <checkbox-tree
               :data="dcfThreeData"
               :checkAllAction="checkAllTreesAction"
-              @update:CheckAll="updateTree(2, $event)"
+              @update:Tree="updateTree('dcf', $event)"
             />
           </el-form-item>
         </el-form-item>

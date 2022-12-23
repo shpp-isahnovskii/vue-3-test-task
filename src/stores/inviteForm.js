@@ -42,12 +42,12 @@ export const useInviteFormStore = defineStore('inviteForm', {
     }),
   },
   actions: {
-    submitForm() {
+    submitInviteForm() {
       console.log('good job!');
       console.log(this.formData);
       this.isFormSubmitted = true;
     },
-    resetForm() {
+    resetInviteForm() {
       this.$reset();
       this.isFormSubmitted = false;
     },
