@@ -9,8 +9,9 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "element-plus": "^2.2.26",
     "@element-plus/icons-vue": "^2.0.10",
+    "element-plus": "^2.2.26",
+    "lottie-web-vue": "^2.0.6",
     "pinia": "^2.0.26",
     "vue": "^3.2.45"
   },

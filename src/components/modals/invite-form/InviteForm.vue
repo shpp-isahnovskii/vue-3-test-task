@@ -51,7 +51,7 @@ const submitForm = () => {
 <template>
   <el-button @click="handleButtonClick"
     ><span v-if="store.isFormSubmitted">Reset Form</span
-    ><span v-else>Modal Form</span></el-button
+    ><span v-else>Open form</span></el-button
   >
   <Teleport to="body">
     <div v-if="open" class="modal-overlay">
