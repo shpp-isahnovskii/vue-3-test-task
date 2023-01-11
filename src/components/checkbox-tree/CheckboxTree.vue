@@ -79,9 +79,9 @@ function keysSearch(data, fieldToFind, result = []) {
 </script>
 
 <template>
-  <div class="checkbox-tree__wrapper">
+  <div class="tree-wrapper">
     <el-checkbox
-      class="check-box__select-all"
+      class="tree__select-all"
       v-model="checkAll"
       @change="handleCheckAllChange"
       >Select All
@@ -98,8 +98,8 @@ function keysSearch(data, fieldToFind, result = []) {
 </template>
 
 <style lang="scss" scoped>
-.checkbox-tree__wrapper {
-  .check-box__select-all {
+.tree-wrapper {
+  .tree__select-all {
     margin-bottom: 10px;
   }
   .el-tree {

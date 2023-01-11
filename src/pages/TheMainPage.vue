@@ -10,19 +10,15 @@ const { isFormSubmitted, formData } = storeToRefs(useInviteFormStore());
 </script>
 
 <template>
-  <div
-    class="page-wrapper"
-    :class="{ 'invite-form__wrapper': isFormSubmitted }"
-  >
-    <h2 class="page-header">
+  <div :class="['page-wrapper', { form_submitted: isFormSubmitted }]">
+    <h2 class="header">
       <span v-if="isFormSubmitted">Invite Info</span
       ><span v-else>Test Task</span>
     </h2>
-    <div class="page-content">
+    <div class="content-block">
       <template v-if="!isFormSubmitted">
         <lottie-animation
-          class="page-vue-icon"
-          ref="anim"
+          class="vue-icon"
           :animationData="animatedLogo"
           :loop="true"
           :autoPlay="true"
@@ -39,7 +35,7 @@ const { isFormSubmitted, formData } = storeToRefs(useInviteFormStore());
         </p></template
       >
       <template v-else>
-        <div class="invite-form__article">
+        <div class="invite-form-block">
           <div class="invite-form__header">General</div>
           <div class="invite-form__data">
             Name: <span>{{ formData.name }}</span>
@@ -64,7 +60,7 @@ const { isFormSubmitted, formData } = storeToRefs(useInviteFormStore());
             <span v-if="!formData.companies.length"> none </span>
           </div>
         </div>
-        <div class="invite-form__article">
+        <div class="invite-form-block">
           <div class="invite-form__header">Location</div>
           <div class="invite-form__data">
             Main location: <span>{{ formData.mainLocation }}</span>
@@ -76,7 +72,7 @@ const { isFormSubmitted, formData } = storeToRefs(useInviteFormStore());
             </span>
           </div>
           <div>
-            <div class="invite-form__wrapper">
+            <div>
               Admin: <span>{{ formData.admin }}</span>
             </div>
           </div>
@@ -95,30 +91,30 @@ const { isFormSubmitted, formData } = storeToRefs(useInviteFormStore());
   display: flex;
   flex-direction: column;
   align-items: center;
-  .page {
-    &-content {
-      margin-bottom: 20px;
-      text-align: justify;
-    }
+  .content-block {
+    margin-bottom: 20px;
+    text-align: justify;
   }
-  .page-vue-icon {
+  .vue-icon {
     height: 100px;
   }
-  &.invite-form__wrapper {
+  &.form_submitted {
     max-width: none;
-    .invite-form__article {
+    .invite-form-block {
       &:first-child {
         margin-bottom: 20px;
       }
-      .invite-form__header {
-        font-weight: 600;
-        font-size: 18px;
-        margin-bottom: 5px;
-      }
-      .invite-form__data {
-        font-weight: 600;
-        span {
-          font-weight: 400;
+      .invite-form {
+        &__header {
+          font-weight: 600;
+          font-size: 18px;
+          margin-bottom: 5px;
+        }
+        &__data {
+          font-weight: 600;
+          span {
+            font-weight: 400;
+          }
         }
       }
     }

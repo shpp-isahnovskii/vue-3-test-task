@@ -33,3 +33,13 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Figma link
+```sh
+https://www.figma.com/file/qWFCw9OE1u0biZ1pKpY6Tf/Precoro-test-(copy)?t=ODI9Ch658WgiQnE2-0
+```
+
+### Builded version
+```sh
+https://shpp-isahnovskii.github.io/vue-3-modal/
+```
