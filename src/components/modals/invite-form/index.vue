@@ -9,7 +9,7 @@ import { ref } from 'vue';
 
 const store = useInviteFormStore();
 
-const open = ref(true);
+const open = ref(false);
 const activeName = ref('first');
 
 /* reference to the general-info Child page */
